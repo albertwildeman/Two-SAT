@@ -1,8 +1,69 @@
 from KosarajuLib import kosaraju
+import random as rndm
 import numpy as np
 
 
-def two_sat(n_variables, clauses):
+
+def two_sat_papadimitriou(n_variables, clauses, max_searches):
+
+    # Set maximum allowable number of searches
+    max_searches = 1
+    # Set maximum allowable number of flips in a search
+    max_flips = 2 * n_variables**2
+
+    # get number of clauses
+    n_clauses = clauses.shape[0]
+
+    # initialize
+    i_search = 0
+    current_state_feasible = False
+
+    while i_search < max_searches and not current_state_feasible:
+
+        # Initialize state (st) variables to random initial guess
+        st = [rndm.random() > 0.5 for x in range(n_variables)]
+
+        n_flips = 0
+
+        # Go over all the clauses, but do it in random order
+        iter_range = list(range(n_clauses))
+        rndm.shuffle(iter_range)
+
+        while n_flips < max_flips and not current_state_feasible:
+
+            # Check if state satisfies all clauses. Until proven otherwise, consider it correct.
+            current_state_feasible = True
+
+            # # Go over all the clauses, but do it in random order
+            # iter_range = list(range(n_clauses))
+            # rndm.shuffle(iter_range)
+            for i_clause in iter_range:
+
+                clause = clauses[i_clause]
+                clause_variables = abs(clause)
+                clause_signs = np.sign(clause)
+
+                # If neither of the 2 variables match the clause, the current state is not feasible
+                if (st[clause_variables[0]]>=0) != clause_signs[0] and (st[clause_variables[1]]>=0) != clause_signs[1]:
+
+                    # Declare the current state not feasible
+                    current_state_feasible = False
+
+                    # Change the current state. Randomly pick either of the variables in the clause to flip.
+                    variable_to_flip = clause_variables[ 1*(rndm.random()>0.5) ]
+                    # flip it
+                    st[variable_to_flip] = not st[variable_to_flip]
+
+                    # Increment number of flips
+                    n_flips += 1
+                    break
+
+        # Increment the number of searches performed
+        i_search += 1
+
+    return current_state_feasible
+
+def two_sat_kosaraju(n_variables, clauses):
     # Determines the existence of a solution to a 2-sat problem, using Kosaraju's algorithm
     # to determine the strongly connected components of the equivalent graph.
 
@@ -41,7 +102,5 @@ def two_sat(n_variables, clauses):
     print("Kosaraju in progress...")
     leaders = kosaraju(edges)
     print("Kosaraju completed.")
-
-
 
     return False
