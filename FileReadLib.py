@@ -1,3 +1,5 @@
+import numpy as np
+
 def get_2sat(filename):
 
     with open(filename, mode="r") as input_file:
@@ -10,6 +12,6 @@ def get_2sat(filename):
 
         # Get the clauses of the 2-sat problem from all other lines
         string_lines = [x[:-1].split(" ") for x in raw_lines[1:]]
-        clauses = [(int(x), int(y)) for x, y in string_lines]
+        clauses = np.array([(int(x), int(y)) for x, y in string_lines])
 
     return n_variables, clauses
