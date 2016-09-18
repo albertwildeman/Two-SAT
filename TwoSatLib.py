@@ -6,16 +6,13 @@ def two_sat_backtrack(n_vars, clauses):
     # build list with relative clauses for each variable. From of the entries:
     # req[i_var][var_value][req_var, req_value]
 
-    # Build 4 lists of lists, one for
-    # t_reqs_t = [None] * n_variables
-    # t_reqs_f = [None] * n_variables
-    # f_reqs_t = [None] * n_variables
-    # f_reqs_f = [None] * n_variables
+    # Build 4 lists of lists, one for combination of booleans that would violate a clause
     t_reqs_t = [[] for x in range(n_vars)]
     t_reqs_f = [[] for x in range(n_vars)]
     f_reqs_t = [[] for x in range(n_vars)]
     f_reqs_f = [[] for x in range(n_vars)]
 
+    # Initialize list to keep track of how many clauses each variable is involved in
     var_n_clauses = [0 for x in range(n_vars)]
 
     for clause in clauses:
@@ -44,7 +41,7 @@ def two_sat_backtrack(n_vars, clauses):
     i_start = 0
     bool_start = True
     feasible = True
-    local_conflict = [True, True]
+    local_conflict = [False, False]
 
     while i_start < n_vars and not conflict_found:
 
@@ -60,7 +57,7 @@ def two_sat_backtrack(n_vars, clauses):
             bool_start = True
             if sum(local_conflict) ==2:
                 feasible = False
-            local_conflict = [True, True]
+            local_conflict = [False, False]
             i_start += 1
 
     return feasible

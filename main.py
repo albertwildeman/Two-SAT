@@ -1,13 +1,13 @@
 from FileReadLib import get_2sat
 from TwoSatLib import two_sat_backtrack
 
-test_mode = True
+test_mode = False
 
 # Parameter to set maximum number of independent searches in papadimitriou's algorithm.
 max_searches = 1
 
 if test_mode:
-    n_cases = 6
+    n_cases = 8
     filename_root = "2sat_test"
 else:
     n_cases = 6
