@@ -1,16 +1,13 @@
 from FileReadLib import get_2sat
-from TwoSatLib import two_sat_kosaraju
-from TwoSatLib import two_sat_papadimitriou
+from TwoSatLib import two_sat_backtrack
 
-# method = "kosaraju"
-method = "papadimitriou"
-test_mode = False
+test_mode = True
 
 # Parameter to set maximum number of independent searches in papadimitriou's algorithm.
 max_searches = 1
 
 if test_mode:
-    n_cases = 2
+    n_cases = 6
     filename_root = "2sat_test"
 else:
     n_cases = 6
@@ -28,14 +25,9 @@ for i_case in range(n_cases):
     print("Working on file: " + filename)
 
     # Run 2-sat algorithm
-    if method == "kosaraju":
-        satisfiable[i_case] = two_sat_kosaraju(n_variables, clauses)
-    elif method == "papadimitriou":
-        satisfiable[i_case] = two_sat_papadimitriou(n_variables, clauses, max_searches)
-    else:
-        raise(NameError, "Invalid method specified.")
+    satisfiable[i_case] = two_sat_backtrack(n_variables, clauses)
 
     # Print result
-    print("Solution found for case #" + str(i_case+1) + ": " + str(satisfiable[i_case]))
+    print("Solution possible for case #" + str(i_case+1) + ": " + str(satisfiable[i_case]))
 
 print("done.")
